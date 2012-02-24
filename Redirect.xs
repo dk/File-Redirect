@@ -11,7 +11,7 @@ struct IPerlDir old_dir;
 static void
 fill_stat_t( AV * av_stat, Stat_t *st)
 {
-	if ( av_len(av_stat) != 12 ) croak("panic: stat array is not 12-long:%d");
+	if ( av_len(av_stat) != 12 ) croak("panic: stat array is not 12-long:%d", av_len(av_stat));
 
 #define AVx(n) (*(av_fetch(av_stat,n,0)))
 	st-> st_dev   = SvIV(AVx(0));
