@@ -1,0 +1,10 @@
+Changes
+lib/File/Redirect/Base.pm
+lib/File/Redirect/Simple.pm
+lib/File/Redirect.pm
+Makefile.PL
+MANIFEST
+Redirect.xs
+t/01_load.t
+t/02_simple.t
+t/03_require.t
