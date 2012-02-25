@@ -4,7 +4,7 @@ use warnings;
 require DynaLoader;
 our @EXPORT_OK = qw(mount umount);
 our @ISA = qw(DynaLoader Exporter);
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 bootstrap File::Redirect $VERSION;
 
 use Errno;
