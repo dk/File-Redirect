@@ -1,6 +1,8 @@
 Changes
 lib/File/Redirect/Base.pm
 lib/File/Redirect/Simple.pm
+lib/File/Redirect/lib.pm
+lib/File/Redirect/Zip.pm
 lib/File/Redirect.pm
 Makefile.PL
 MANIFEST

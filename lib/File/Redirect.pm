@@ -4,7 +4,7 @@ use warnings;
 require DynaLoader;
 our @EXPORT_OK = qw(mount umount);
 our @ISA = qw(DynaLoader Exporter);
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 bootstrap File::Redirect $VERSION;
 
 use Errno;
@@ -136,3 +136,42 @@ sub Close
 }
 
 1;
+
+=pod
+
+=head1 NAME
+
+File::Redirect - override native perl file oprations
+
+=head1 SYNOPSIS
+
+   $ unzip -l Foo-Bar-0.01.zip
+   Archive:  Foo-Bar-0.01.zip
+     Length     Date   Time    Name
+    --------    ----   ----    ----
+           0  02-25-12 07:46   Foo-Bar-0.01/
+           0  02-25-12 07:47   Foo-Bar-0.01/lib/
+           0  02-25-12 07:47   Foo-Bar-0.01/lib/Foo/
+          43  02-25-12 07:47   Foo-Bar-0.01/lib/Foo/Bar.pm
+    --------                   -------
+          43                   4 files
+
+   $ unzip -p Foo-Bar-0.01.zip Foo-Bar-0.01/lib/Foo/Bar.pm 
+   package Foo::Bar;
+   sub foo { 42 }
+   1;
+
+   $ cat test.pl 
+   use File::Redirect::lib ('Zip', 't/Foo-Bar-0.01.zip', 'zip:', '/Foo-Bar-0.01/lib');
+   use Foo::Bar;
+   print Foo::Bar::foo(), "\n";
+
+   $ perl test.pl
+   42
+
+=head1 AUTHOR
+
+Dmitry Karasik, E<lt>dmitry@karasik.eu.orgE<gt>.
+
+=cut
+

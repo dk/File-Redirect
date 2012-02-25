@@ -8,4 +8,7 @@ WriteMakefile(
 			repository => 'http://github.com/dk/File-Redirect',
 		},
 	},
+	PREREQ_PM          => {
+		'Archive::Zip'	=> 0,
+	},
 );
