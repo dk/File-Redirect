@@ -11,4 +11,5 @@ t/01_load.t
 t/02_simple.t
 t/03_require.t
 t/04_zip.t
+t/98_pod.t
 t/Foo-Bar-0.01.zip
