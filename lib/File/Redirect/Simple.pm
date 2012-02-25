@@ -51,3 +51,18 @@ sub Open
 }
 
 1;
+
+=head1 NAME
+
+File::Redirect::Simple - simple hash-based vfs
+
+=head1 DESCRIPTION
+
+The second argument to C<mount> is a simple hash, where each entry is a file name
+and its content. For example, after call
+
+   mount( 'Simple', { 'a' => 'b' }, 'simple:')
+
+reading from file 'simple:a' yield 'b' as its content.
+
+=cut

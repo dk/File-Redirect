@@ -70,3 +70,18 @@ sub Open
 }
 
 1;
+
+=head1 NAME
+
+File::Redirect::Zip - zip vfs
+
+=head1 DESCRIPTION
+
+The second argument to C<mount> is a .zip archive name.
+
+=head1 SYNOPSIS
+
+   mount( 'Zip', '/tmp/archive.zip', 'zip1:') or die;
+   open F, '< zip1:/path/file.txt';
+
+=cut

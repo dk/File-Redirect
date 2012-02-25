@@ -4,7 +4,7 @@ use warnings;
 require DynaLoader;
 our @EXPORT_OK = qw(mount umount);
 our @ISA = qw(DynaLoader Exporter);
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 bootstrap File::Redirect $VERSION;
 
 use Errno;
@@ -20,22 +20,27 @@ sub mount
 {
 	my ( $provider, $request, $as_path ) = @_;
 
-	die "$as_path already mounted" if exists $mounted{$as_path};
+	eval {
 
-	debug "mount($provider, $request, $as_path)" if $debug;
+		die "$as_path already mounted" if exists $mounted{$as_path};
 
-	my $class = 'File::Redirect::' . $provider;
-	eval "use $class;";
-	die $@ if $@;
+		debug "mount($provider, $request, $as_path)" if $debug;
 
-	$mounted{$as_path} = {
-		request => $request,
-		device  => $class-> mount( $request, $dev_no ),
-		match   => qr/^\Q$as_path\E/,
-		handles => {},
+		my $class = 'File::Redirect::' . $provider;
+		eval "use $class;";
+		die $@ if $@;
+
+		$mounted{$as_path} = {
+			request => $request,
+			device  => $class-> mount( $request, $dev_no ),
+			match   => qr/^\Q$as_path\E/,
+			handles => {},
+		};
+
+		$dev_no++;
 	};
 
-	$dev_no++;
+	return $@ ? undef : 1;
 }
 
 sub umount
@@ -162,12 +167,46 @@ File::Redirect - override native perl file oprations
    1;
 
    $ cat test.pl 
-   use File::Redirect::lib ('Zip', 't/Foo-Bar-0.01.zip', 'zip:', '/Foo-Bar-0.01/lib');
+   use File::Redirect::lib ('Zip', 'Foo-Bar-0.01.zip', '/Foo-Bar-0.01/lib');
    use Foo::Bar;
    print Foo::Bar::foo(), "\n";
 
    $ perl test.pl
    42
+
+=head1 DESCRIPTION
+
+Perl's own C<use> and C<require> cannot be overloaded so that underlying file requests
+are mapped to something else. This module hacks IO layer system so that one can fool
+Perl's IO into thinking that it operates on files while feeding something else, for
+example archives. 
+
+The framework currently overrides only C<stat> and C<open> builtins, which is enough
+for hacking into C<use> and C<require>. The framework though is capable of being extended
+to override other file- and dir- based operations, but that's probably is easier to
+do separately by overriding C<*CORE::GLOBAL::> functions.
+
+=head1 API
+
+=over
+
+=item mount $provider, $request, $as_path
+
+Similar to unix mount(1) command, the function 'mounts' an abstract data entity ($request)
+into file path $as_path by sending it to $provider. For example, provider C<Simple> treats
+request as path-content hash. After this command
+
+   mount( 'Simple', { 'a' => 'b' }, 'simple:')
+
+reading from file 'simple:a' yield 'b' as its content. See also L<File::Redirect::Zip>.
+
+The function return success flag; on failure, $@ contains the error.
+
+=item umount $path
+
+Removes data entity associated with $path.
+
+=back
 
 =head1 AUTHOR
 
