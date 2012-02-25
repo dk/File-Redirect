@@ -186,6 +186,8 @@ for hacking into C<use> and C<require>. The framework though is capable of being
 to override other file- and dir- based operations, but that's probably is easier to
 do separately by overriding C<*CORE::GLOBAL::> functions.
 
+Warning: works only if perl's PERL_IMPLICIT_SYS is enabled
+
 =head1 API
 
 =over
